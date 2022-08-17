@@ -5,26 +5,20 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # Remote execution infra
 # Required configuration for remote build execution
-bazel_toolchains_version = "2.0.2"
-
-bazel_toolchains_sha256 = "a653c9d318e42b14c0ccd7ac50c4a2a276c0db1e39743ab88b5aa2f0bc9cf607"
-
 http_archive(
-    name = "bazel_toolchains",
-    sha256 = bazel_toolchains_sha256,
-    strip_prefix = "bazel-toolchains-%s" % bazel_toolchains_version,
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/%s.tar.gz" % bazel_toolchains_version,
-        "https://github.com/bazelbuild/bazel-toolchains/archive/%s.tar.gz" % bazel_toolchains_version,
-    ],
+    name = "bazelci_rules",
+    sha256 = "eca21884e6f66a88c358e580fd67a6b148d30ab57b1680f62a96c00f9bc6a07e",
+    strip_prefix = "bazelci_rules-1.0.0",
+    url = "https://github.com/bazelbuild/continuous-integration/releases/download/rules-1.0.0/bazelci_rules-1.0.0.tar.gz",
 )
 
-load("@bazel_toolchains//rules:rbe_repo.bzl", "rbe_autoconfig")
+load("@bazelci_rules//:rbe_repo.bzl", "rbe_preconfig")
 
 # Creates toolchain configuration for remote execution with BuildKite CI
 # for rbe_ubuntu1604
-rbe_autoconfig(
+rbe_preconfig(
     name = "buildkite_config",
+    toolchain = "ubuntu1804-bazel-java11",
 )
 
 ## Sanity checks
